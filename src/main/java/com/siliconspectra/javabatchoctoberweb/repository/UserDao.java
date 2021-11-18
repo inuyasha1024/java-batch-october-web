@@ -1,10 +1,13 @@
-package com.siliconspectra.dao;
+package com.siliconspectra.javabatchoctoberweb.repository;
 
-import com.siliconspectra.demo.Config;
-import com.siliconspectra.entity.User;
+import com.siliconspectra.javabatchoctoberweb.entity.User;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +16,13 @@ public class UserDao {
 
     public void updateUser(String id, User user) {
         String sql = "UPDATE user " +
-                "SET username = '"+user.getUsername()+"', password = '"+user.getPassword()+"'" +
+                "SET username = '" + user.getUsername() + "', password = '" + user.getPassword() + "'" +
                 "WHERE id='" + id + "';";
         execute(sql);
     }
 
     public void deleteUserById(String id) {
-        String sql = "delete from user where id ='" + id+ "'";
+        String sql = "delete from user where id ='" + id + "'";
         execute(sql);
     }
 
@@ -32,7 +35,7 @@ public class UserDao {
         }
         while (resultSet.next()) {
             User user = new User(resultSet.getString("id"),
-                    resultSet.getString("username"),resultSet.getString("password"));
+                    resultSet.getString("username"), resultSet.getString("password"));
             users.add(user);
         }
         return users;
@@ -46,7 +49,7 @@ public class UserDao {
         }
         while (resultSet.next()) {
             User user = new User(resultSet.getString("id"),
-                    resultSet.getString("username"),resultSet.getString("password"));
+                    resultSet.getString("username"), resultSet.getString("password"));
             return user;
         }
         return new User();
@@ -54,10 +57,9 @@ public class UserDao {
 
     public boolean createUser(User user) {
         String sql = "INSERT INTO user (username, password) " +
-                "VALUES ('" + user.getUsername()+"', '"+user.getPassword()+"');";
+                "VALUES ('" + user.getUsername() + "', '" + user.getPassword() + "');";
         return execute(sql);
     }
-
 
 
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -76,9 +78,9 @@ public class UserDao {
             rs = statement.executeQuery(sql);
             System.out.println(rs);
             return rs;
-        }catch (Exception e) {
+        } catch (Exception e) {
             return null;
-        }finally {
+        } finally {
 //            connection.close();
 //            statement.close();
         }
@@ -93,13 +95,12 @@ public class UserDao {
             statement = connection.createStatement();
             boolean rs = statement.execute(sql);
             return rs;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }finally {
+        } finally {
 //            connection.close();
 //            statement.close();
         }
     }
-
 }
